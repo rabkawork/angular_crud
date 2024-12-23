@@ -5,10 +5,14 @@
     <app-sidebar></app-sidebar>
 
     <div class="content">
-
       <div class="container">
         <h2>Data Table</h2>
-        
+
+        <!-- Success Alert (will show upon success) -->
+        <div *ngIf="showAlert" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+
         <!-- Button to open the modal for adding data -->
         <button class="btn btn-success mb-3" (click)="openAddModal()">Add Data</button>
 
@@ -35,40 +39,43 @@
     </div>
 
     <!-- Modal for Add/Edit -->
-    <div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="dataModalLabel">{{ isEditing ? 'Edit Data' : 'Add Data' }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal for Add/Edit -->
+<!-- Modal for Add/Edit -->
+<div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dataModalLabel">{{ isEditing ? 'Edit Data' : 'Add Data' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="isEditing ? update() : create()">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input id="title" type="text" class="form-control" formControlName="title"
+              [class.is-invalid]="form.controls['title'].invalid && form.controls['title'].touched" />
+            <div *ngIf="form.controls['title'].invalid && form.controls['title'].touched" class="invalid-feedback">
+              Title is required.
+            </div>
           </div>
-          <div class="modal-body">
-            <form [formGroup]="form" (ngSubmit)="isEditing ? update() : create()">
-              <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input id="title" type="text" class="form-control" formControlName="title"
-                  [class.is-invalid]="form.controls['title'].invalid && form.controls['title'].touched" />
-                <div *ngIf="form.controls['title'].invalid && form.controls['title'].touched" class="invalid-feedback">
-                  Title is required.
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="body" class="form-label">Body</label>
-                <textarea id="body" class="form-control" formControlName="body"
-                  [class.is-invalid]="form.controls['body'].invalid && form.controls['body'].touched"></textarea>
-                <div *ngIf="form.controls['body'].invalid && form.controls['body'].touched" class="invalid-feedback">
-                  Body is required.
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelEdit()">Cancel</button>
-                <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update' : 'Create' }}</button>
-              </div>
-            </form>
+          <div class="mb-3">
+            <label for="body" class="form-label">Body</label>
+            <textarea id="body" class="form-control" formControlName="body"
+              [class.is-invalid]="form.controls['body'].invalid && form.controls['body'].touched"></textarea>
+            <div *ngIf="form.controls['body'].invalid && form.controls['body'].touched" class="invalid-feedback">
+              Body is required.
+            </div>
           </div>
-        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelEdit()">Cancel</button>
+            <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update' : 'Create' }}</button>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
+</div>
+
 
     <app-footer></app-footer> <!-- Footer component -->
   </div>
