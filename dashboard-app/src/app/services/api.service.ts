@@ -19,13 +19,6 @@ export class ApiService {
     return this.http.get<Data>(`${this.apiUrl}/${id}`);
   }
 
-  // create(data: Data): Observable<Data> {
-  //   return this.http.post<Data>(this.apiUrl, data);
-  // }
-
-  // update(id: number, data: Data): Observable<Data> {
-  //   return this.http.put<Data>(`${this.apiUrl}/${id}`, data);
-  // }
 
   create(data: Data): Observable<HttpResponse<Data>> {
     return this.http.post<Data>(this.apiUrl, data, { observe: 'response' });
@@ -36,7 +29,9 @@ export class ApiService {
     return this.http.put<Data>(`${this.apiUrl}/${id}`, data, { observe: 'response' });
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  
+  delete(id: number): Observable<HttpResponse<void>> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { observe: 'response' });
   }
+  
 }

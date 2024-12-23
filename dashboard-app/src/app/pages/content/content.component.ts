@@ -90,8 +90,22 @@ export class ContentComponent implements OnInit {
   }
 
   delete(id: number): void {
-    this.apiService.delete(id).subscribe(() => {
-      this.loadData();
+    this.apiService.delete(id).subscribe({
+      next: (response) => {
+        // Check if status code is 200 OK
+        if (response.status === 200) {
+          this.successMessage = 'Data deleted successfully!';
+          this.showAlert = true;
+          setTimeout(() => this.showAlert = false, 5000); // Hide alert after 5 seconds
+          this.loadData(); // Reload data after successful delete
+        } else {
+          console.error('Failed to delete data. Status code:', response.status);
+        }
+      },
+      error: (error) => {
+        console.error('Error during delete request:', error);
+        // Optionally, show an error message or handle errors
+      }
     });
   }
 
