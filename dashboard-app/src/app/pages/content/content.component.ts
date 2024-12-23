@@ -9,10 +9,10 @@ import { RouterOutlet } from '@angular/router';
 
 
 @Component({
-  selector: 'app-content',
-  standalone: true, // Standalone Component
-  imports: [CommonModule, ReactiveFormsModule], // Tambahkan CommonModule di sini
-  templateUrl: './content.component.html',
+  selector: 'component-content',
+  standalone: true,  // Standalone Component
+  imports: [CommonModule, ReactiveFormsModule],  // Add required imports
+  templateUrl: './content.component.html',  // Ensure correct path
   styleUrls: ['./content.component.css'],
 })
 export class ContentComponent implements OnInit {
