@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Data } from '../../models/data';
 
 @Component({
   selector: 'app-modal',
-  imports: [],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.css'
+  styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent {
-
+  @Input() data: Data | null = null;
 }

@@ -1,68 +1,73 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Data } from '../../models/data';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Tambahkan ini
+import { ReactiveFormsModule } from '@angular/forms'; // Untuk form handling
 
 @Component({
   selector: 'app-content',
+  standalone: true, // Standalone Component
+  imports: [CommonModule, ReactiveFormsModule], // Tambahkan CommonModule di sini
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss']
+  styleUrls: ['./content.component.css'],
 })
 export class ContentComponent implements OnInit {
-  data: Data[] = [];
   form: FormGroup;
+  data: Data[] = [];
   isEditing = false;
-  currentId: number | null = null;
+  editingId: number | null = null;
 
-  constructor(private api: ApiService, private fb: FormBuilder) {
+  constructor(private apiService: ApiService, private fb: FormBuilder) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       body: ['', Validators.required],
-      userId: [1, Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.getData();
+    this.loadData();
   }
 
-  getData(): void {
-    this.api.getAll().subscribe((res) => {
+  loadData(): void {
+    this.apiService.getAll().subscribe((res) => {
       this.data = res;
     });
   }
 
   create(): void {
-    if (this.form.invalid) return;
-    this.api.create(this.form.value).subscribe(() => {
-      this.getData();
-      this.form.reset();
-    });
+    if (this.form.valid) {
+      this.apiService.create(this.form.value).subscribe(() => {
+        this.form.reset();
+        this.loadData();
+      });
+    }
   }
 
-  edit(data: Data): void {
+  edit(item: Data): void {
     this.isEditing = true;
-    this.currentId = data.id!;
-    this.form.patchValue(data);
+    this.editingId = item.id;
+    this.form.patchValue(item);
   }
 
   update(): void {
-    if (this.form.invalid || this.currentId === null) return;
-    this.api.update(this.currentId, this.form.value).subscribe(() => {
-      this.getData();
-      this.cancelEdit();
-    });
-  }
-
-  delete(id: number): void {
-    this.api.delete(id).subscribe(() => {
-      this.getData();
-    });
+    if (this.form.valid && this.editingId !== null) {
+      this.apiService.update(this.editingId, this.form.value).subscribe(() => {
+        this.cancelEdit();
+        this.loadData();
+      });
+    }
   }
 
   cancelEdit(): void {
     this.isEditing = false;
-    this.currentId = null;
+    this.editingId = null;
     this.form.reset();
+  }
+
+  delete(id: number): void {
+    this.apiService.delete(id).subscribe(() => {
+      this.loadData();
+    });
   }
 }
