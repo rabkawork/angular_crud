@@ -4,6 +4,9 @@ import { ApiService } from '../../services/api.service';
 import { Data } from '../../models/data';
 import { CommonModule } from '@angular/common'; // Tambahkan ini
 import { ReactiveFormsModule } from '@angular/forms'; // Untuk form handling
+import { RouterOutlet } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-content',
